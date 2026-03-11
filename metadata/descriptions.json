@@ -1,1 +1,52 @@
-
+{
+  "CDS": {
+    "title": "Türkiye 5Y CDS",
+    "meaning": "Türkiye'nin ülke risk primini gösterir.",
+    "watch": "200 altı görece rahat, 200-300 orta risk, 400 üzeri stres, 600 üzeri kriz bölgesi olarak izlenebilir."
+  },
+  "M2": {
+    "title": "M2 Para Arzı",
+    "meaning": "Ekonomideki geniş para arzını gösterir.",
+    "watch": "Tek başına yeterli değildir; faiz, kredi büyümesi ve enflasyonla birlikte okunmalıdır."
+  },
+  "USDTRY": {
+    "title": "USD/TRY",
+    "meaning": "TL'nin dolar karşısındaki değerini gösterir.",
+    "watch": "Kısa sürede sert hızlanma genelde finansal stres veya beklenti bozulmasına işaret eder."
+  },
+  "RESERVES": {
+    "title": "TCMB Rezervleri",
+    "meaning": "Merkez Bankası'nın rezerv görünümünü gösterir.",
+    "watch": "Sürekli düşüş eğilimi kur savunma kapasitesi açısından dikkatle izlenir."
+  },
+  "POLICY_RATE": {
+    "title": "Politika Faizi",
+    "meaning": "TCMB'nin ana politika faizidir.",
+    "watch": "Asıl önemli olan yalnızca seviye değil, yön değişimi ve piyasa tepkisidir."
+  },
+  "US10Y": {
+    "title": "ABD 10Y Tahvil Faizi",
+    "meaning": "Küresel finansal koşulların önemli göstergelerindendir.",
+    "watch": "Yükseliş, gelişen piyasalar üzerinde baskı yaratabilir."
+  },
+  "DXY": {
+    "title": "DXY",
+    "meaning": "Dolar endeksidir.",
+    "watch": "Güçlü dolar dönemi genelde gelişen piyasaları zorlar."
+  },
+  "OIL": {
+    "title": "Petrol",
+    "meaning": "Türkiye için enflasyon ve cari açık açısından kritik girdidir.",
+    "watch": "Kalıcı yüksek petrol fiyatı makro baskıyı artırabilir."
+  },
+  "TR10Y": {
+    "title": "Türkiye 10Y Tahvil Faizi",
+    "meaning": "Uzun vadeli TL faiz beklentisini gösterir.",
+    "watch": "Faiz indirimi başlasa bile uzun tahvil düşmüyorsa piyasa temkinli olabilir."
+  },
+  "BIST_USD": {
+    "title": "BIST 100 (USD Bazlı)",
+    "meaning": "BIST 100'ün kur etkisinden arındırılmış görünümünü verir.",
+    "watch": "TL bazlı yükseliş ile dolar bazlı gerçek performans farklı olabilir."
+  }
+}
