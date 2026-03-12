@@ -66,9 +66,9 @@ def render_group(title, keys):
                 last_text = "N/A"
             else:
                 if key == "BIST_M2":
-                    last_text = f"{last.iloc[-1]:.8f}"
-                else:
-                    last_text = f"{last.iloc[-1]:,.2f}"
+                    last_text = f"{last.iloc[-1]*1_000_000:.2f} ppm"
+                 else:
+                     last_text = f"{last.iloc[-1]:,.2f}"
             st.metric(DESCRIPTIONS[key]["title"], last_text)
             plot_small(df, DESCRIPTIONS[key]["title"])
 
