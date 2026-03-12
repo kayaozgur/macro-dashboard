@@ -125,6 +125,34 @@ except Exception as e:
 
     print("bist_usd.csv hesaplanamadı:", e)
 
+# BIST / M2 hesaplama
+try:
+    bist = pd.read_csv("data/bist.csv")
+    m2 = pd.read_csv("data/m2.csv")
+
+    bist["date"] = pd.to_datetime(bist["date"])
+    m2["date"] = pd.to_datetime(m2["date"])
+
+    merged = pd.merge_asof(
+        bist.sort_values("date"),
+        m2.sort_values("date"),
+        on="date",
+        direction="backward",
+        suffixes=("_bist", "_m2")
+    )
+
+    merged["value"] = merged["value_bist"] / merged["value_m2"]
+
+    result = merged[["date", "value"]].dropna()
+    result["date"] = result["date"].dt.strftime("%Y-%m-%d")
+
+    result.to_csv("data/bist_m2.csv", index=False)
+
+    print("bist_m2.csv başarıyla yazıldı.")
+
+except Exception as e:
+    print("bist_m2 hesaplanamadı:", e)
+
 # Şimdilik placeholder kalan seriler
 placeholder_files = [
     "m2.csv",
