@@ -131,7 +131,6 @@ placeholder_files = [
     "policy_rate.csv",
     "tr10y.csv",
     "cds.csv",
-    "bist_usd.csv",
 ]
 
 for filename in placeholder_files:
