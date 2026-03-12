@@ -56,9 +56,10 @@ def fetch_yahoo_series(ticker: str, period: str = "max") -> pd.DataFrame:
 
 # Gerçek veri çekilecek seriler
 yahoo_map = {
-    "us10y.csv": "^TNX",       # US 10Y yield
-    "dxy.csv": "DX-Y.NYB",     # Dollar Index
-    "oil.csv": "BZ=F",         # Brent futures
+    "us10y.csv": "^TNX",
+    "dxy.csv": "DX-Y.NYB",
+    "oil.csv": "BZ=F",
+    "usdtry.csv": "TRY=X"
 }
 
 for filename, ticker in yahoo_map.items():
