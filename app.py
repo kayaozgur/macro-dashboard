@@ -79,20 +79,4 @@ render_group("Likidite", LIQ)
 render_group("Küresel", GLOBAL)
 render_group("Yerel Piyasa", LOCAL)
 
-st.divider()
 
-selected = st.selectbox(
-    "Detay gösterge",
-    list(SERIES_FILES.keys()),
-    format_func=lambda x: DESCRIPTIONS[x]["title"]
-)
-
-df = read_series(selected)
-val_col = [c for c in df.columns if c != "date"][0]
-
-fig = px.line(df, x="date", y=val_col, title=DESCRIPTIONS[selected]["title"])
-fig.update_layout(height=500)
-st.plotly_chart(fig, use_container_width=True)
-
-st.markdown(f"**Ne anlama gelir:** {DESCRIPTIONS[selected]['meaning']}")
-st.markdown(f"**Dikkat edilmesi gerekenler:** {DESCRIPTIONS[selected]['watch']}")
