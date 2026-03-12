@@ -53,6 +53,17 @@ def fetch_yahoo_series(ticker: str, period: str = "max") -> pd.DataFrame:
         threads=False,
     )
     return df
+    
+    def fetch_fred_series(series_code):
+    try:
+        df = pdr.DataReader(series_code, "fred")
+        df = df.reset_index()
+        df.columns = ["date", "value"]
+        df["date"] = df["date"].dt.strftime("%Y-%m-%d")
+        return df
+    except Exception as e:
+        print(f"{series_code} alınamadı: {e}")
+        return None
 
 
 # Gerçek veri çekilecek seriler
