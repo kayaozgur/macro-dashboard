@@ -155,8 +155,6 @@ except Exception as e:
 
 # Şimdilik placeholder kalan seriler
 placeholder_files = [
-    "m2.csv",
-    "policy_rate.csv",
     "tr10y.csv",
     "cds.csv",
 ]
