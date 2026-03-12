@@ -71,7 +71,8 @@ yahoo_map = {
     "us10y.csv": "^TNX",
     "dxy.csv": "DX-Y.NYB",
     "oil.csv": "BZ=F",
-    "usdtry.csv": "TRY=X"
+    "usdtry.csv": "TRY=X",
+    "bist.csv": "XU100.IS"
 }
 
 for filename, ticker in yahoo_map.items():
