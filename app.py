@@ -86,9 +86,8 @@ def render_group(title, keys):
                 st.metric(DESCRIPTIONS[key]["title"], last_text)
                 plot_small(df, key)
 
-render_group("Risk", RISK)
-render_group("Likidite", LIQ)
-render_group("Küresel", GLOBAL)
-render_group("Yerel Piyasa", LOCAL)
-
+render_group("📉 Risk", RISK)
+render_group("💧 Likidite", LIQ)
+render_group("🌍 Küresel", GLOBAL)
+render_group("🇹🇷 Yerel Piyasa", LOCAL)
 
