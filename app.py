@@ -54,7 +54,11 @@ def plot_small(df, key):
     fig = px.line(df, x="date", y=val_col, title=DESCRIPTIONS[key]["title"])
     fig.update_layout(height=250, margin=dict(l=10, r=10, t=40, b=10))
 
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(
+    fig,
+    use_container_width=True,
+    config={"displayModeBar": False}
+)
 
     st.caption(
         f"📘 {DESCRIPTIONS[key]['meaning']}  "
