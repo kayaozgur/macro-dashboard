@@ -155,7 +155,7 @@ except Exception as e:
 
 # Şimdilik placeholder kalan seriler
 placeholder_files = [
-    "tr10y.csv",
+
 ]
 
 for filename in placeholder_files:
