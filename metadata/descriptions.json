@@ -53,5 +53,10 @@
   "title": "BIST 100",
   "meaning": "Borsa İstanbul 100 endeksini gösterir.",
   "watch": "TL bazlı endeks seviyesi tek başına yeterli değildir; kur ve enflasyonla birlikte okunmalıdır."
+  },
+  "BIST_M2": {
+  "title": "BIST / M2",
+  "meaning": "BIST 100'ün Türkiye para arzına oranını gösterir.",
+  "watch": "Oran yükseldikçe borsa likiditeye göre pahalılaşmış olabilir; düştükçe göreli ucuzluk görülebilir."
   }
 }
