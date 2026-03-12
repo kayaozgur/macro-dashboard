@@ -1,48 +1,54 @@
 import time
-from datetime import datetime
+from io import StringIO
 from pathlib import Path
+from datetime import datetime
 
 import pandas as pd
-from pandas_datareader import data as pdr
+import requests
 
-data_dir = Path("data")
-data_dir.mkdir(exist_ok=True)
+DATA_DIR = Path("data")
+DATA_DIR.mkdir(exist_ok=True)
 
-
-def save_series(df: pd.DataFrame, filename: str):
-    out = df.copy().reset_index()
-
-    # İlk sütun tarih olsun
-    first_col = out.columns[0]
-    value_col = out.columns[1]
-
-    out = out[[first_col, value_col]]
-    out.columns = ["date", "value"]
-
-    out["date"] = pd.to_datetime(out["date"], errors="coerce").dt.strftime("%Y-%m-%d")
-    out["value"] = pd.to_numeric(out["value"], errors="coerce")
-
-    out.to_csv(data_dir / filename, index=False)
+HEADERS = {
+    "User-Agent": "macro-dashboard/1.0"
+}
 
 
-def save_placeholder(filename: str):
-    df = pd.DataFrame(
-        {
-            "date": [datetime.utcnow().strftime("%Y-%m-%d")],
-            "value": [None],
-        }
-    )
-    df.to_csv(data_dir / filename, index=False)
+def save_series(df: pd.DataFrame, filename: str) -> None:
+    df = df.copy()
+    df.columns = ["date", "value"]
+    df["date"] = pd.to_datetime(df["date"], errors="coerce")
+    df["value"] = pd.to_numeric(df["value"], errors="coerce")
+    df = df.dropna(subset=["date", "value"])
+    df["date"] = df["date"].dt.strftime("%Y-%m-%d")
+    df.to_csv(DATA_DIR / filename, index=False)
 
 
-def fetch_fred_series(series_code: str, start="2000-01-01", retries=3, wait_seconds=5):
+def save_placeholder(filename: str) -> None:
+    pd.DataFrame(
+        {"date": [datetime.utcnow().strftime("%Y-%m-%d")], "value": [None]}
+    ).to_csv(DATA_DIR / filename, index=False)
+
+
+def fetch_fred_csv(series_code: str, retries: int = 3, wait_seconds: int = 5) -> pd.DataFrame:
+    url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={series_code}"
     last_error = None
 
     for attempt in range(1, retries + 1):
         try:
-            df = pdr.DataReader(series_code, "fred", start).dropna()
-            if not df.empty:
-                return df
+            resp = requests.get(url, headers=HEADERS, timeout=60)
+            resp.raise_for_status()
+
+            df = pd.read_csv(StringIO(resp.text))
+            if df.shape[1] < 2:
+                raise ValueError(f"{series_code} beklenen CSV formatında değil.")
+
+            df = df.iloc[:, :2]
+            if df.empty:
+                raise ValueError(f"{series_code} boş döndü.")
+
+            return df
+
         except Exception as e:
             last_error = e
             print(f"{series_code} alınamadı. Deneme {attempt}/{retries}. Hata: {e}")
@@ -52,7 +58,7 @@ def fetch_fred_series(series_code: str, start="2000-01-01", retries=3, wait_seco
     raise last_error if last_error else Exception(f"{series_code} verisi alınamadı.")
 
 
-# FRED'den gerçek veri çekilen seriler
+# FRED'den gerçek veri çekilecek seriler
 fred_files = {
     "us10y.csv": "DGS10",
     "dxy.csv": "DTWEXBGS",
@@ -61,7 +67,7 @@ fred_files = {
 
 for filename, series_code in fred_files.items():
     try:
-        df = fetch_fred_series(series_code)
+        df = fetch_fred_csv(series_code)
         save_series(df, filename)
         print(f"{filename} başarıyla yazıldı.")
     except Exception as e:
