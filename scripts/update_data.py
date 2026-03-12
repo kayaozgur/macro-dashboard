@@ -54,7 +54,7 @@ def fetch_yahoo_series(ticker: str, period: str = "max") -> pd.DataFrame:
     )
     return df
     
-    def fetch_fred_series(series_code):
+def fetch_fred_series(series_code):
     try:
         df = pdr.DataReader(series_code, "fred")
         df = df.reset_index()
