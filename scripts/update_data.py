@@ -97,6 +97,34 @@ except Exception as e:
     save_placeholder("reserves.csv")
     print(f"reserves.csv alınamadı: {e}")
 
+# BIST USD hesaplama
+
+try:
+
+    bist = pd.read_csv(DATA_DIR / "bist.csv")
+    usdtry = pd.read_csv(DATA_DIR / "usdtry.csv")
+
+    bist["date"] = pd.to_datetime(bist["date"])
+    usdtry["date"] = pd.to_datetime(usdtry["date"])
+
+    merged = pd.merge(bist, usdtry, on="date", how="inner")
+
+    merged["value"] = merged["value_x"] / merged["value_y"]
+
+    result = merged[["date", "value"]]
+
+    result["date"] = result["date"].dt.strftime("%Y-%m-%d")
+
+    result.to_csv(DATA_DIR / "bist_usd.csv", index=False)
+
+    print("bist_usd.csv başarıyla yazıldı.")
+
+except Exception as e:
+
+    save_placeholder("bist_usd.csv")
+
+    print("bist_usd.csv hesaplanamadı:", e)
+
 # Şimdilik placeholder kalan seriler
 placeholder_files = [
     "m2.csv",
