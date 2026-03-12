@@ -3,6 +3,7 @@ from pathlib import Path
 
 import pandas as pd
 import yfinance as yf
+from pandas_datareader import data as pdr
 
 DATA_DIR = Path("data")
 DATA_DIR.mkdir(exist_ok=True)
