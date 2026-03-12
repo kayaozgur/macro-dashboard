@@ -76,7 +76,7 @@ def render_group(title, keys):
                 else:
                     last_text = f"{last.iloc[-1]:,.2f}"
             st.metric(DESCRIPTIONS[key]["title"], last_text)
-            plot_small(df, DESCRIPTIONS[key]["title"])
+            plot_small(df, key)
 
 st.title("Makro Dashboard")
 
