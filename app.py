@@ -48,12 +48,18 @@ def read_series(key):
 
     return df
 
-def plot_small(df, title):
+def plot_small(df, key):
     val_col = [c for c in df.columns if c != "date"][0]
-    fig = px.line(df, x="date", y=val_col, title=title)
+
+    fig = px.line(df, x="date", y=val_col, title=DESCRIPTIONS[key]["title"])
     fig.update_layout(height=250, margin=dict(l=10, r=10, t=40, b=10))
+
     st.plotly_chart(fig, use_container_width=True)
 
+    st.caption(
+        f"📘 {DESCRIPTIONS[key]['meaning']}  "
+        f"📊 {DESCRIPTIONS[key]['watch']}"
+    )
 def render_group(title, keys):
     st.subheader(title)
     cols = st.columns(len(keys))
