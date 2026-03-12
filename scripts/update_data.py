@@ -1,27 +1,39 @@
-import time
-from io import StringIO
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 import pandas as pd
-import requests
+import yfinance as yf
 
 DATA_DIR = Path("data")
 DATA_DIR.mkdir(exist_ok=True)
 
-HEADERS = {
-    "User-Agent": "macro-dashboard/1.0"
-}
 
+def save_price_series(df: pd.DataFrame, filename: str) -> None:
+    if df is None or df.empty:
+        save_placeholder(filename)
+        return
 
-def save_series(df: pd.DataFrame, filename: str) -> None:
-    df = df.copy()
-    df.columns = ["date", "value"]
-    df["date"] = pd.to_datetime(df["date"], errors="coerce")
-    df["value"] = pd.to_numeric(df["value"], errors="coerce")
-    df = df.dropna(subset=["date", "value"])
-    df["date"] = df["date"].dt.strftime("%Y-%m-%d")
-    df.to_csv(DATA_DIR / filename, index=False)
+    out = df.copy().reset_index()
+
+    # Yahoo genelde Date + Close döndürür
+    if "Date" not in out.columns:
+        out.rename(columns={out.columns[0]: "Date"}, inplace=True)
+
+    if "Close" not in out.columns:
+        save_placeholder(filename)
+        return
+
+    out = out[["Date", "Close"]]
+    out.columns = ["date", "value"]
+    out["date"] = pd.to_datetime(out["date"], errors="coerce").dt.strftime("%Y-%m-%d")
+    out["value"] = pd.to_numeric(out["value"], errors="coerce")
+    out = out.dropna(subset=["date", "value"])
+
+    if out.empty:
+        save_placeholder(filename)
+        return
+
+    out.to_csv(DATA_DIR / filename, index=False)
 
 
 def save_placeholder(filename: str) -> None:
@@ -30,48 +42,32 @@ def save_placeholder(filename: str) -> None:
     ).to_csv(DATA_DIR / filename, index=False)
 
 
-def fetch_fred_csv(series_code: str, retries: int = 3, wait_seconds: int = 5) -> pd.DataFrame:
-    url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={series_code}"
-    last_error = None
-
-    for attempt in range(1, retries + 1):
-        try:
-            resp = requests.get(url, headers=HEADERS, timeout=60)
-            resp.raise_for_status()
-
-            df = pd.read_csv(StringIO(resp.text))
-            if df.shape[1] < 2:
-                raise ValueError(f"{series_code} beklenen CSV formatında değil.")
-
-            df = df.iloc[:, :2]
-            if df.empty:
-                raise ValueError(f"{series_code} boş döndü.")
-
-            return df
-
-        except Exception as e:
-            last_error = e
-            print(f"{series_code} alınamadı. Deneme {attempt}/{retries}. Hata: {e}")
-            if attempt < retries:
-                time.sleep(wait_seconds)
-
-    raise last_error if last_error else Exception(f"{series_code} verisi alınamadı.")
+def fetch_yahoo_series(ticker: str, period: str = "max") -> pd.DataFrame:
+    df = yf.download(
+        ticker,
+        period=period,
+        interval="1d",
+        auto_adjust=False,
+        progress=False,
+        threads=False,
+    )
+    return df
 
 
-# FRED'den gerçek veri çekilecek seriler
-fred_files = {
-    "us10y.csv": "DGS10",
-    "dxy.csv": "DTWEXBGS",
-    "oil.csv": "DCOILBRENTEU",
+# Gerçek veri çekilecek seriler
+yahoo_map = {
+    "us10y.csv": "^TNX",       # US 10Y yield
+    "dxy.csv": "DX-Y.NYB",     # Dollar Index
+    "oil.csv": "BZ=F",         # Brent futures
 }
 
-for filename, series_code in fred_files.items():
+for filename, ticker in yahoo_map.items():
     try:
-        df = fetch_fred_csv(series_code)
-        save_series(df, filename)
+        df = fetch_yahoo_series(ticker)
+        save_price_series(df, filename)
         print(f"{filename} başarıyla yazıldı.")
     except Exception as e:
-        print(f"{filename} için veri alınamadı, placeholder yazılıyor. Hata: {e}")
+        print(f"{filename} alınamadı, placeholder yazılıyor. Hata: {e}")
         save_placeholder(filename)
 
 
