@@ -31,7 +31,7 @@ SERIES_FILES = {
 RISK = ["CDS", "USDTRY", "RESERVES"]
 LIQ = ["M2", "POLICY_RATE"]
 GLOBAL = ["US10Y", "DXY", "OIL"]
-LOCAL = ["TR10Y", "BIST_USD"]
+LOCAL = ["TR10Y", "BIST", "BIST_USD"]
 
 def read_series(key):
     path = DATA_DIR / SERIES_FILES[key]
