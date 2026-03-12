@@ -63,12 +63,12 @@ def render_group(title, keys):
             val_col = [c for c in df.columns if c != "date"][0]
             last = df[val_col].dropna()
             if last.empty:
-    last_text = "N/A"
-else:
-    if key == "BIST_M2":
-        last_text = f"{last.iloc[-1]:.8f}"
-    else:
-        last_text = f"{last.iloc[-1]:,.2f}"
+                last_text = "N/A"
+            else:
+                if key == "BIST_M2":
+                    last_text = f"{last.iloc[-1]:.8f}"
+                else:
+                    last_text = f"{last.iloc[-1]:,.2f}"
             st.metric(DESCRIPTIONS[key]["title"], last_text)
             plot_small(df, DESCRIPTIONS[key]["title"])
 
