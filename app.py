@@ -35,7 +35,15 @@ LOCAL = ["TR10Y", "BIST_USD"]
 def read_series(key):
     path = DATA_DIR / SERIES_FILES[key]
     df = pd.read_csv(path)
-    df["date"] = pd.to_datetime(df["date"])
+
+    if "date" not in df.columns:
+        return pd.DataFrame({"date": [], "value": []})
+
+    df["date"] = pd.to_datetime(df["date"], errors="coerce")
+    df["value"] = pd.to_numeric(df["value"], errors="coerce")
+
+    df = df.dropna(subset=["value"])
+
     return df
 
 def plot_small(df, title):
