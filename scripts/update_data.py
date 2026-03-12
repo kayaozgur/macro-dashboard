@@ -74,7 +74,6 @@ for filename, ticker in yahoo_map.items():
 
 # Şimdilik placeholder kalan seriler
 placeholder_files = [
-    "usdtry.csv",
     "m2.csv",
     "policy_rate.csv",
     "reserves.csv",
