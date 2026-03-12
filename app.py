@@ -25,6 +25,7 @@ SERIES_FILES = {
     "OIL": "oil.csv",
     "TR10Y": "tr10y.csv",
     "BIST_USD": "bist_usd.csv",
+    "BIST": "bist.csv",
 }
 
 RISK = ["CDS", "USDTRY", "RESERVES"]
