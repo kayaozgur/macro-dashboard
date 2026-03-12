@@ -48,5 +48,10 @@
     "title": "BIST 100 (USD Bazlı)",
     "meaning": "BIST 100'ün kur etkisinden arındırılmış görünümünü verir.",
     "watch": "TL bazlı yükseliş ile dolar bazlı gerçek performans farklı olabilir."
+  },
+  "BIST": {
+  "title": "BIST 100",
+  "meaning": "Borsa İstanbul 100 endeksini gösterir.",
+  "watch": "TL bazlı endeks seviyesi tek başına yeterli değildir; kur ve enflasyonla birlikte okunmalıdır."
   }
 }
