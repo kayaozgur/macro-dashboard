@@ -83,12 +83,23 @@ for filename, ticker in yahoo_map.items():
         print(f"{filename} alınamadı, placeholder yazılıyor. Hata: {e}")
         save_placeholder(filename)
 
+# TCMB rezervleri
+try:
+    reserves = fetch_fred_series("TRESEGTRM052N")
+    if reserves is not None and not reserves.empty:
+        reserves.to_csv(DATA_DIR / "reserves.csv", index=False)
+        print("reserves.csv başarıyla yazıldı.")
+    else:
+        save_placeholder("reserves.csv")
+        print("reserves.csv placeholder olarak yazıldı.")
+except Exception as e:
+    save_placeholder("reserves.csv")
+    print(f"reserves.csv alınamadı: {e}")
 
 # Şimdilik placeholder kalan seriler
 placeholder_files = [
     "m2.csv",
     "policy_rate.csv",
-    "reserves.csv",
     "tr10y.csv",
     "cds.csv",
     "bist_usd.csv",
