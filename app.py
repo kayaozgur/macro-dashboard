@@ -63,22 +63,24 @@ def plot_small(df, key):
 def render_group(title, keys):
     st.subheader(title)
     cols = st.columns(len(keys))
+
     for col, key in zip(cols, keys):
         with col:
-            df = read_series(key)
-            val_col = [c for c in df.columns if c != "date"][0]
-            last = df[val_col].dropna()
-            if last.empty:
-                last_text = "N/A"
-            else:
-                if key == "BIST_M2":
-                    last_text = f"{last.iloc[-1]*1_000_000:.2f} ppm"
-                else:
-                    last_text = f"{last.iloc[-1]:,.2f}"
-            st.metric(DESCRIPTIONS[key]["title"], last_text)
-            plot_small(df, key)
+            with st.container(border=True):
+                df = read_series(key)
+                val_col = [c for c in df.columns if c != "date"][0]
+                last = df[val_col].dropna()
 
-st.title("Makro Dashboard")
+                if last.empty:
+                    last_text = "N/A"
+                else:
+                    if key == "BIST_M2":
+                        last_text = f"{last.iloc[-1]*1_000_000_000_000:.2f} ppm"
+                    else:
+                        last_text = f"{last.iloc[-1]:,.2f}"
+
+                st.metric(DESCRIPTIONS[key]["title"], last_text)
+                plot_small(df, key)
 
 render_group("Risk", RISK)
 render_group("Likidite", LIQ)
